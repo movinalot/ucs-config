@@ -1,188 +1,233 @@
 {
-	"connection" : {
-		"name": "UCSPE1",
-		"ip": "192.168.220.162",
-		"username": "admin",
-        "password": "password",
-        "secure": true
-	},
-	"ucs_objects": [{
-		"mode": "create",
-		"module": "ucsmsdk.mometa.org.OrgOrg",
-		"class": "OrgOrg",
-		"objects":[{
-			"properties":{
-				"parent_mo_or_dn": "org-root",
-				"name": "prod"
-			},
-			"message": "create organization prod"
-		},{
-			"properties":{
-				"parent_mo_or_dn": "org-root/org-prod",
-				"name": "east"
-			},
-			"message": "create organization prod/east"
-		},{
-			"properties":{
-				"parent_mo_or_dn": "org-root/org-prod/org-east",
-				"name": "DC01"
-			},
-			"message": "create organization prod/east/DC01"
-		},{
-			"properties":{
-				"parent_mo_or_dn": "org-root/org-prod/org-east",
-				"name": "DC02"
-			},
-			"message": "create organization prod/east/DC02"
-		},{
-			"properties":{
-				"parent_mo_or_dn": "org-root/org-prod",
-				"name": "west"
-			},
-			"message": "create organization prod/west"
-		}]
-	},{
-		"mode": "update",
-		"object": {
-			"dn": "sys/svc-ext/datetime-svc",
-			"properties":{
-				"timezone": "America/Los_Angeles (Pacific Time)"
-			},
-			"message": "set timezone to America/Los_Angeles (Pacific Time)"
-		}
-	},{
-		"mode": "create",
-		"module": "ucsmsdk.mometa.comm.CommNtpProvider",
-		"class": "CommNtpProvider",
-		"objects":[{
-			"properties":{
-				"parent_mo_or_dn": "sys/svc-ext/datetime-svc",
-				"name": "192.168.10.30"
-				},
-				"message": "add ntp server192.168.10.30"
-		},{
-			"properties":{
-				"parent_mo_or_dn": "sys/svc-ext/datetime-svc",
-				"name": "192.168.10.31"
-			},
-			"message": "add ntp server192.168.10.31"
-		}]
-	},{
-		"mode": "update",
-		"object": {
-			"dn": "org-root/chassis-discovery",
-			"properties":{
-				"multicast_hw_hash": "disabled",
-				"backplane_speed_pref": "40G",
-				"action": "platform-max",
-				"rebalance": "user-acknowledged",
-				"link_aggregation_pref": "none"
-			},
-			"message": "configure chassis discovery policy"
-		}
-	},{
-		"mode": "update",
-		"object": {
-			"dn": "org-root/server-discovery",
-			"properties":{
-				"action": "immediate"
-			},
-			"message": "configure rack server discovery policy"
-		}
-	},{
-		"mode": "update",
-		"object": {
-			"dn": "org-root/server-mgmt-policy",
-			"properties":{
-				"action": "auto-acknowledged"
-			},
-			"message": "configure rack management connection policy"
-		}
-	},{
-		"mode": "update",
-		"object": {
-			"dn": "org-root/psu-policy",
-			"properties":{
-				"redundancy": "n+1"
-			},
-			"message": "configure power policy"
-		}
-	},{
-		"mode": "update",
-		"object": {
-			"dn": "org-root/pwr-mgmt-policy",
-			"properties":{
-				"style": "intelligent-policy-driven",
-				"profiling": "no",
-				"skip_power_deploy_check": "no",
-				"skip_power_check": "no"
-			},
-			"message": "configure global power allocation policy"
-		}
-	},{
-		"mode": "create",
-		"module": "ucsmsdk.mometa.ippool.IppoolBlock",
-		"class": "IppoolBlock",
-		"objects": [{
-			"properties":{
-				"parent_mo_or_dn": "org-root/ip-pool-ext-mgmt",
-				"r_from": "192.168.20.100",
-				"to": "192.168.20.100",
-				"def_gw": "192.168.20.1",
-				"subnet": "255.255.255.0",
-				"prim_dns": "8.8.8.8",
-				"sec_dns": "0.0.0.0"
-			},
-			"message": "create ip pool block"
-		}]
-	},{
-		"mode": "create",
-		"module": "ucsmsdk.mometa.macpool.MacpoolPool",
-		"class": "MacpoolPool",
-		"objects": [{
+    "connection" :
+    {
+        "module":"ucsmsdk.ucshandle",
+        "class":"UcsHandle",
+        "properties":{
+            "ip":"172.22.251.170",
+            "username":"admin",
+            "password":"Nbv12345",
+            "secure":true
+        }
+    },
+    "objects": [
+        {
+            "module": "ucsmsdk.mometa.compute.ComputeChassisDiscPolicy",
+            "class": "ComputeChassisDiscPolicy",
+            "properties":{
+                "parent_mo_or_dn": "org-root",
+                "multicast_hw_hash": "disabled",
+                "backplane_speed_pref": "40G",
+                "action": "1-link",
+                "rebalance": "user-acknowledged",
+                "link_aggregation_pref": "port-channel"
+            },
+            "message": "configure chassis discovery policy"
+        },{
+            "module": "ucsmsdk.mometa.compute.ComputeServerDiscPolicy",
+            "class": "ComputeServerDiscPolicy",
+            "properties":{
+                "parent_mo_or_dn": "org-root",
+                "action": "immediate"
+            },
+            "message": "configure rack server discovery policy"
+        },{
+            "module": "ucsmsdk.mometa.compute.ComputeServerMgmtPolicy",
+            "class": "ComputeServerMgmtPolicy",
+            "properties":{
+                "parent_mo_or_dn": "org-root",
+                "action": "auto-acknowledged"
+                },
+            "message": "configure rack management connection policy"
+        },{
+            "module": "ucsmsdk.mometa.compute.ComputePsuPolicy",
+            "class": "ComputePsuPolicy",
+            "properties":{
+                "parent_mo_or_dn": "org-root",
+                    "redundancy": "non-redundant"
+                },
+            "message": "configure power policy"
+        },{
+            "module": "ucsmsdk.mometa.power.PowerMgmtPolicy",
+            "class": "PowerMgmtPolicy",
+            "properties":{
+            "parent_mo_or_dn": "org-root",
+                "style": "intelligent-policy-driven",
+                "profiling": "no",
+                "skip_power_deploy_check": "no",
+                "skip_power_check": "no"
+            },
+            "message": "configure global power allocation policy"
+        },{
+            "module": "ucsmsdk.mometa.org.OrgOrg",
+		    "class": "OrgOrg",
+		    "properties":{
+                "parent_mo_or_dn": "org-root",
+			    "name": "prod"
+            },
+            "message": "create organization prod",
+		    "children": [
+                {
+                    "module": "ucsmsdk.mometa.org.OrgOrg",
+			        "class": "OrgOrg",
+			        "properties":{
+				        "name": "east"
+                    },
+                    "message": "created organization prod/east",
+			        "children": [
+                        {
+				            "module": "ucsmsdk.mometa.org.OrgOrg",
+				            "class": "OrgOrg",
+                            "properties":{
+                                "name": "DC01"
+                            },
+                            "message": "created organization prod/east/DC01"
+                        },{
+                            "module": "ucsmsdk.mometa.org.OrgOrg",
+                            "class": "OrgOrg",
+                            "properties":{
+                                "name": "DC02"
+                            },
+                            "message": "created organization prod/east/DC02"
+                        }
+                    ]
+                },{
+                    "module": "ucsmsdk.mometa.org.OrgOrg",
+                    "class": "OrgOrg",
+                    "properties":{
+                        "name": "west"
+                    },
+                    "message": "created organization prod/west"
+                }
+            ]
+        },{
+            "module": "ucsmsdk.mometa.comm.CommDateTime",
+            "class": "CommDateTime",
+            "properties":{
+                "parent_mo_or_dn": "sys/svc-ext",
+                "timezone": "America/Los_Angeles (Pacific Time)"
+            },
+            "message": "set timezone to America/Los_Angeles (Pacific Time)",
+            "children": [
+                {
+                    "module": "ucsmsdk.mometa.comm.CommNtpProvider",
+                    "class": "CommNtpProvider",
+                    "properties":{
+                        "name": "192.168.10.30"
+                    },
+                    "message": "add ntp server192.168.10.30"
+                },{
+                    "module": "ucsmsdk.mometa.comm.CommNtpProvider",
+                    "class": "CommNtpProvider",
+                    "properties":{
+                        "name": "192.168.10.31"
+                    },
+                    "message": "add ntp server192.168.10.31"
+                }
+            ]
+        },{
+			"module": "ucsmsdk.mometa.lsboot.LsbootPolicy",
+			"class": "LsbootPolicy",
 			"properties":{
 				"parent_mo_or_dn": "org-root/org-prod",
 				"name": "Python_SDS",
-				"assignment_order": "sequential"
+				"enforce_vnic_name": "yes",
+				"boot_mode": "legacy",
+				"reboot_on_update": "no"
 			},
-			"message": "create mac pool"
-		}]
-	},{
-		"mode": "create",
-		"module": "ucsmsdk.mometa.macpool.MacpoolBlock",
-		"class": "MacpoolBlock",
-		"objects": [{
-			"properties":{
-				"parent_mo_or_dn": "org-root/org-prod/mac-pool-Python_SDS",
-				"r_from": "00:25:B5:00:10:00",
-				"to": "00:25:B5:00:10:63"
-			},
-			"message": "create mac pool block"
-		}]
-	},{
-		"mode": "create",
-		"module": "ucsmsdk.mometa.uuidpool.UuidpoolPool",
-		"class": "UuidpoolPool",
-		"objects": [{
-			"properties":{
-				"parent_mo_or_dn": "org-root/org-prod",
-				"name": "Python_SDS",
-				"prefix": "1995F72A-F24E-EEEE",
-				"assignment_order": "sequential"
-			},
-			"message": "create uuid pool"
-		}]
-	},{
-		"mode": "create",
-		"module": "ucsmsdk.mometa.uuidpool.UuidpoolBlock",
-		"class": "UuidpoolBlock",
-		"objects": [{
-			"properties":{
-				"parent_mo_or_dn": "org-root/org-prod/uuid-pool-Python_SDS",
-				"r_from": "0000-000000000100",
-				"to": "0000-000000000164"
-			},
-			"message": "create uuid pool block"
-		}]
-	}]
+			"message": "Created boot policy",
+			"children":[
+				{
+					"module": "ucsmsdk.mometa.lsboot.LsbootVirtualMedia",
+					"class": "LsbootVirtualMedia",
+					"properties":{
+						"access": "read-only-local",
+						"lun_id": "0",
+						"order": "2"
+					},
+					"message": "added virtual media"
+				},{
+					"module": "ucsmsdk.mometa.lsboot.LsbootStorage",
+					"class": "LsbootStorage",
+					"properties":{
+						"order": "1"
+					},
+					"message": "set local storage boot order",
+					"children":[
+						{
+							"module": "ucsmsdk.mometa.lsboot.LsbootLocalStorage",
+							"class": "LsbootLocalStorage",
+							"properties":{
+							},
+							"message": "added local storage boot",
+							"children":[
+								{
+									"module": "ucsmsdk.mometa.lsboot.LsbootDefaultLocalImage",
+									"class": "LsbootDefaultLocalImage",
+									"properties":{
+										"order": "1"
+									},
+									"message": "added local storage boot image"
+								}
+							]
+						}
+					]
+				}
+			]
+		},{
+            "module": "ucsmsdk.mometa.ippool.IppoolBlock",
+            "class": "IppoolBlock",
+            "properties":{
+                "parent_mo_or_dn": "org-root/ip-pool-ext-mgmt",
+                "r_from": "192.168.20.2",
+                "to": "192.168.20.100",
+                "def_gw": "192.168.20.1",
+                "subnet": "255.255.255.0",
+                "prim_dns": "8.8.8.8",
+                "sec_dns": "0.0.0.0"
+            },
+            "message": "create ip pool block"
+        },{
+            "module": "ucsmsdk.mometa.uuidpool.UuidpoolPool",
+            "class": "UuidpoolPool",
+            "properties":{
+                "parent_mo_or_dn": "org-root/org-prod",
+                "name": "Python_SDS",
+                "prefix": "1995F72A-F24E-EEEE",
+                "assignment_order": "sequential"
+            },
+            "message": "create uuid pool",
+            "children":[
+                {
+                    "module": "ucsmsdk.mometa.uuidpool.UuidpoolBlock",
+                    "class": "UuidpoolBlock",
+                    "properties":{
+                        "r_from": "0000-000000000100",
+                        "to": "0000-000000000164"
+                    },
+                    "message": "create uuid pool block"
+                }
+            ]
+        },{
+            "module": "ucsmsdk.mometa.macpool.MacpoolPool",
+            "class": "MacpoolPool",
+            "properties":{
+                "parent_mo_or_dn": "org-root/org-prod",
+                "name": "Python_SDS",
+                "assignment_order": "sequential"
+            },
+            "message": "create mac pool",
+            "children": [
+                {
+                    "module": "ucsmsdk.mometa.macpool.MacpoolBlock",
+                    "class": "MacpoolBlock",
+                    "properties":{
+                        "r_from": "00:25:B5:00:10:00",
+                        "to": "00:25:B5:00:10:63"
+                    },
+                    "message": "create mac pool block"
+                }
+            ]
+        }
+    ]
 }

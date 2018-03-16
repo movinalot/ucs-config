@@ -13,29 +13,29 @@ Author:
     Cisco Systems, Inc.
 """
 
-from importlib import import_module
-import json
-import logging
-import os
 import sys
+import json
+import urllib2
+from importlib import import_module
+import logging
 
 logging.basicConfig(level=logging.DEBUG, 
                     format='%(asctime)s - %(levelname)s - %(message)s')
 
 def traverse(managed_object, mo=""):
     logging.info(managed_object['class'])
-    logging.debug(managed_object["module"])
-    logging.debug(managed_object["properties"])
 
     mo_module = import_module(managed_object["module"])
     mo_class = getattr(mo_module, managed_object["class"])
 
+    logging.debug(managed_object["module"])
+    logging.debug(managed_object["properties"])
+
     if "parent_mo_or_dn" not in managed_object["properties"]:
         managed_object["properties"]["parent_mo_or_dn"] = mo
 
-    mo = mo_class(**managed_object["properties"])
     logging.debug(mo)
-
+    mo = mo_class(**managed_object["properties"])
     handle.add_mo(mo, modify_present = True)
 
     if "children" in managed_object:
@@ -44,7 +44,7 @@ def traverse(managed_object, mo=""):
 
 if __name__ == '__main__':
 
-    filename = os.path.join(sys.path[0], 'ucsm.json')
+    filename = 'Y:\\Documents\\src\\ucs\\ucs-config\\python\\ucsm\\ucsm.json'
 
     logging.info("Reading settings file: " + filename)
     try:
@@ -52,7 +52,8 @@ if __name__ == '__main__':
             settings = json.load(file)
     
     except IOError as eError:
-        sys.exit(eError)
+        e_exit(None,eError,"Unable to open settings file",None)
+
 
     mo_module = import_module(settings["connection"]["module"])
     obj_class = settings["connection"]["class"]
