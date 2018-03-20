@@ -3,6 +3,7 @@
     {
         "module":"ucsmsdk.ucshandle",
         "class":"UcsHandle",
+        "commit-buffer": true,
         "properties":{
             "ip":"172.22.251.170",
             "username":"admin",
@@ -59,48 +60,6 @@
             },
             "message": "configure global power allocation policy"
         },{
-            "module": "ucsmsdk.mometa.org.OrgOrg",
-		    "class": "OrgOrg",
-		    "properties":{
-                "parent_mo_or_dn": "org-root",
-			    "name": "prod"
-            },
-            "message": "create organization prod",
-		    "children": [
-                {
-                    "module": "ucsmsdk.mometa.org.OrgOrg",
-			        "class": "OrgOrg",
-			        "properties":{
-				        "name": "east"
-                    },
-                    "message": "created organization prod/east",
-			        "children": [
-                        {
-				            "module": "ucsmsdk.mometa.org.OrgOrg",
-				            "class": "OrgOrg",
-                            "properties":{
-                                "name": "DC01"
-                            },
-                            "message": "created organization prod/east/DC01"
-                        },{
-                            "module": "ucsmsdk.mometa.org.OrgOrg",
-                            "class": "OrgOrg",
-                            "properties":{
-                                "name": "DC02"
-                            },
-                            "message": "created organization prod/east/DC02"
-                        }
-                    ]
-                },{
-                    "module": "ucsmsdk.mometa.org.OrgOrg",
-                    "class": "OrgOrg",
-                    "properties":{
-                        "name": "west"
-                    },
-                    "message": "created organization prod/west"
-                }
-            ]
-        },{
             "module": "ucsmsdk.mometa.comm.CommDateTime",
             "class": "CommDateTime",
             "properties":{
@@ -126,10 +85,69 @@
                 }
             ]
         },{
+            "module": "ucsmsdk.mometa.fabric.FabricLanCloud",
+            "class": "FabricLanCloud",
+            "properties":{
+                "parent_mo_or_dn": "fabric"
+            },
+            "message": "add vlan 700",
+            "children": [
+                {
+                    "module": "ucsmsdk.mometa.fabric.FabricVlan",
+                    "class": "FabricVlan",
+                    "properties":{
+                        "id": "700",
+                        "name": "vlan700"
+                    },
+                    "message": "add vlan 700"
+                },{
+                    "module": "ucsmsdk.mometa.fabric.FabricVlan",
+                    "class": "FabricVlan",
+                    "properties":{
+                        "id": "701",
+                        "name": "vlan701"
+                    },
+                    "message": "add vlan 701"
+                }
+            ]
+        },{
+            "module": "ucsmsdk.mometa.org.OrgOrg",
+            "class": "OrgOrg",
+            "properties":{
+                "parent_mo_or_dn": "org-root",
+                "name": "prod-west"
+            },
+            "message": "created organization prod-west"
+        },{
+            "module": "ucsmsdk.mometa.org.OrgOrg",
+		    "class": "OrgOrg",
+		    "properties":{
+                "parent_mo_or_dn": "org-root",
+			    "name": "prod-east"
+            },
+            "message": "create organization prod-east",
+		    "children": [
+                {
+                    "module": "ucsmsdk.mometa.org.OrgOrg",
+			        "class": "OrgOrg",
+			        "properties":{
+				        "name": "DC01"
+                    },
+                    "message": "created organization prod-east/DC01"
+                },{
+                    "module": "ucsmsdk.mometa.org.OrgOrg",
+                    "class": "OrgOrg",
+                    "properties":{
+                        "name": "DC02"
+                    },
+                    "message": "created organization prod-east/DC02"
+                }
+            ]
+        },{
 			"module": "ucsmsdk.mometa.lsboot.LsbootPolicy",
 			"class": "LsbootPolicy",
 			"properties":{
-				"parent_mo_or_dn": "org-root/org-prod",
+				"parent_mo_or_dn": "org-root/org-prod-east",
 				"name": "Python_SDS",
 				"enforce_vnic_name": "yes",
 				"boot_mode": "legacy",
@@ -191,7 +209,7 @@
             "module": "ucsmsdk.mometa.uuidpool.UuidpoolPool",
             "class": "UuidpoolPool",
             "properties":{
-                "parent_mo_or_dn": "org-root/org-prod",
+                "parent_mo_or_dn": "org-root/org-prod-east",
                 "name": "Python_SDS",
                 "prefix": "1995F72A-F24E-EEEE",
                 "assignment_order": "sequential"
@@ -212,7 +230,7 @@
             "module": "ucsmsdk.mometa.macpool.MacpoolPool",
             "class": "MacpoolPool",
             "properties":{
-                "parent_mo_or_dn": "org-root/org-prod",
+                "parent_mo_or_dn": "org-root/org-prod-east",
                 "name": "Python_SDS",
                 "assignment_order": "sequential"
             },

@@ -3,10 +3,10 @@ ucs-manage.py
 
 Purpose:
     Manage UCS Management from JSON file, using dynamic module loading.
-    All Configuration settings and module reqiorements come from the 
-    JSON/YAML/XML file.
+    All Configuration settings and module requirements come from the 
+    JSON file.
 
-    Configure/Manage UCS Manager and Cisco IMC from JSON/YAML/XML
+    Configure/Manage UCS Manager and Cisco IMC from JSON
 
 Author:
     John McDonough (jomcdono@cisco.com)
@@ -44,25 +44,26 @@ def traverse(managed_object, mo=""):
 
 if __name__ == '__main__':
 
-    filename = os.path.join(sys.path[0], 'ucsm.json')
+    filename = os.path.join(sys.path[0], sys.argv[1])
 
-    logging.info("Reading settings file: " + filename)
+    logging.info("Reading config file: " + filename)
     try:
         with open(filename, "r") as file:
-            settings = json.load(file)
+            config = json.load(file)
     
     except IOError as eError:
         sys.exit(eError)
 
-    mo_module = import_module(settings["connection"]["module"])
-    obj_class = settings["connection"]["class"]
+    mo_module = import_module(config["connection"]["module"])
+    obj_class = config["connection"]["class"]
     mo_class = getattr(mo_module, obj_class)
 
-    handle = mo_class(**settings["connection"]["properties"])
+    handle = mo_class(**config["connection"]["properties"])
     handle.login()
 
-    for managed_object in settings['objects']:
+    for managed_object in config['objects']:
         traverse(managed_object)
-        handle.commit()
+        if config["connection"]["commit-buffer"]:
+            handle.commit()
 
     handle.logout()
