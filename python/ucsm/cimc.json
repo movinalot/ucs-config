@@ -1,0 +1,29 @@
+{
+    "connection" :
+    {
+        "module":"imcsdk.imchandle",
+        "class":"ImcHandle",
+        "commit-buffer": false,
+        "properties":{
+            "ip":"172.22.251.96",
+            "username":"admin",
+            "password":"Nbv12345",
+            "secure":true
+        }
+    },
+    "objects": [
+        {
+            "module": "imcsdk.mometa.aaa.AaaUser",
+            "class": "AaaUser",
+            "properties":{
+                "parent_mo_or_dn": "sys/user-ext",
+                "account_status": "active",
+                "id": "5",
+                "name": "testuser",
+                "priv": "admin",
+                "pwd":  "Nbv12345"
+            },
+            "message": "created/updated test user"
+        }
+    ]
+}
