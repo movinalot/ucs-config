@@ -1,21 +1,20 @@
 {
-    "connection" :
-    {
-        "module":"imcsdk.imchandle",
-        "class":"ImcHandle",
+    "connection": {
+        "module": "imcsdk.imchandle",
+        "class": "ImcHandle",
         "commit-buffer": false,
-        "properties":{
-            "ip":"172.22.251.96",
-            "username":"admin",
-            "password":"Nbv12345",
-            "secure":true
+        "properties": {
+            "ip": "172.22.251.96",
+            "username": "admin",
+            "password": "Nbv12345",
+            "secure": true
         }
     },
     "objects": [
         {
             "module": "imcsdk.mometa.storage.StorageVirtualDriveCreatorUsingUnusedPhysicalDrive",
             "class": "StorageVirtualDriveCreatorUsingUnusedPhysicalDrive",
-            "properties":{
+            "properties": {
                 "parent_mo_or_dn": "sys/rack-unit-1/board/storage-SAS-SLOT-HBA",
                 "virtual_drive_name": "data_01",
                 "drive_group": "[3,4,5]",
@@ -25,10 +24,11 @@
                 "admin_state": "trigger"
             },
             "message": "create virtual drive data_01"
-        },{
+        },
+        {
             "module": "imcsdk.mometa.storage.StorageVirtualDriveCreatorUsingUnusedPhysicalDrive",
             "class": "StorageVirtualDriveCreatorUsingUnusedPhysicalDrive",
-            "properties":{
+            "properties": {
                 "parent_mo_or_dn": "sys/rack-unit-1/board/storage-SAS-SLOT-HBA",
                 "virtual_drive_name": "data_02",
                 "drive_group": "[6,7,8]",
@@ -38,10 +38,11 @@
                 "admin_state": "trigger"
             },
             "message": "create virtual drive data_02"
-        },{
+        },
+        {
             "module": "imcsdk.mometa.storage.StorageVirtualDriveCreatorUsingUnusedPhysicalDrive",
             "class": "StorageVirtualDriveCreatorUsingUnusedPhysicalDrive",
-            "properties":{
+            "properties": {
                 "parent_mo_or_dn": "sys/rack-unit-1/board/storage-SAS-SLOT-HBA",
                 "virtual_drive_name": "log_01",
                 "drive_group": "[9,10]",

@@ -2,11 +2,11 @@
 ucs-manage.py
 
 Purpose:
-    Manage UCS Management from JSON file, using dynamic module loading.
+    Manage UCS Management from configuration file, using dynamic module loading.
     All Configuration settings and module requirements come from the 
-    JSON file.
+    JSON/YAML file.
 
-    Configure/Manage UCS Manager and Cisco IMC from JSON
+    Configure/Manage UCS Manager and Cisco IMC from JSON/YAML
 
 Author:
     John McDonough (jomcdono@cisco.com)
@@ -18,6 +18,7 @@ import json
 import logging
 import os
 import sys
+import yaml
 
 logging.basicConfig(level=logging.DEBUG, 
                     format='%(asctime)s - %(levelname)s - %(message)s')
@@ -49,7 +50,12 @@ if __name__ == '__main__':
     logging.info("Reading config file: " + filename)
     try:
         with open(filename, "r") as file:
-            config = json.load(file)
+            if filename.endswith('.json'):
+                config = json.load(file)
+            elif filename.endswith('.yml'):
+                config = yaml.load(file)
+            else:
+                logging.info("Unsupported file extension for configuration file: " + filename)
     
     except IOError as eError:
         sys.exit(eError)
