@@ -29,7 +29,7 @@ handle.login()
 fabric_lan_cloud = handle.query_dn("fabric/lan")
 vlan_100 = FabricVlan(parent_mo_or_dn=fabric_lan_cloud,
                   	  name="vlan100", 
-  id="100)
+                      id="100)
 
 handle.add_mo(vlan_100)
 handle.commit()
@@ -73,7 +73,7 @@ The configuration file is what drives the code. The configuration file shown bel
             "properties":{
                 "parent_mo_or_dn": "fabric"
             },
-            "message": "add vlan 700",
+            "message": "add vlans",
             "children": [
                 {
                     "module": "ucsmsdk.mometa.fabric.FabricVlan",
