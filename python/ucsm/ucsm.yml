@@ -77,7 +77,7 @@ objects:
         class: FabricLanCloud
         properties:
             parent_mo_or_dn: fabric
-        message: add vlan 700
+        message: add vlans
         children:
             - 
                 module: ucsmsdk.mometa.fabric.FabricVlan
