@@ -3,7 +3,8 @@ ucs-config.py
 
 Purpose:
     Manage UCS Objects from configuration file, using dynamic module loading.
-    All Configuration settings and module requirements come from a JSON/YAML file.
+    All Configuration settings and module requirements come from a JSON/YAML
+    file.
 
     Configure/Manage UCS Manager and Cisco IMC from JSON/YAML
 
@@ -54,7 +55,8 @@ if __name__ == '__main__':
             elif filename.endswith('.yml'):
                 config = yaml.load(file)
             else:
-                logging.info('Unsupported file extension for configuration file: ' + filename)
+                logging.info('Unsupported file extension for configuration ' +
+                'file: ' + filename)
     
     except IOError as eError:
         sys.exit(eError)
