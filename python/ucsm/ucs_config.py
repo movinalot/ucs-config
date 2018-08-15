@@ -1,5 +1,5 @@
 """
-ucs-config.py
+ucs_config.py
 
 Purpose:
     Manage UCS Objects from configuration file, using dynamic module loading.
@@ -20,10 +20,15 @@ import os
 import sys
 import yaml
 
-logging.basicConfig(level=logging.DEBUG, 
+# pylint: disable=invalid-name,redefined-outer-name,logging-not-lazy
+logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s - %(levelname)s - %(message)s')
 
 def traverse(managed_object, mo=''):
+    """
+        Traverse the configuration this function will be called
+        recursively until the end of the configuration is reached
+    """
     logging.info(managed_object['class'])
     logging.debug(managed_object['module'])
     logging.debug(managed_object['properties'])
@@ -37,7 +42,7 @@ def traverse(managed_object, mo=''):
     mo = mo_class(**managed_object['properties'])
     logging.debug(mo)
 
-    handle.add_mo(mo, modify_present = True)
+    handle.add_mo(mo, modify_present=True)
 
     if 'children' in managed_object:
         for child in managed_object['children']:
@@ -55,9 +60,11 @@ if __name__ == '__main__':
             elif filename.endswith('.yml'):
                 config = yaml.load(file)
             else:
-                logging.info('Unsupported file extension for configuration ' +
-                'file: ' + filename)
-    
+                logging.info(
+                    'Unsupported file extension for configuration ' +
+                    'file: ' + filename
+                    )
+
     except IOError as eError:
         sys.exit(eError)
 
