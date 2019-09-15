@@ -20,7 +20,8 @@ import os
 import sys
 import yaml
 
-# pylint: disable=invalid-name,redefined-outer-name,logging-not-lazy
+# pylint: disable=invalid-name,redefined-outer-name
+
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -42,7 +43,7 @@ def traverse(managed_object, mo=''):
     mo = mo_class(**managed_object['properties'])
     logging.debug(mo)
 
-    handle.add_mo(mo, modify_present=True)
+    HANDLE.add_mo(mo, modify_present=True)
 
     if 'children' in managed_object:
         for child in managed_object['children']:
@@ -50,34 +51,34 @@ def traverse(managed_object, mo=''):
 
 if __name__ == '__main__':
 
-    filename = os.path.join(sys.path[0], sys.argv[1])
+    FILENAME = os.path.join(sys.path[0], sys.argv[1])
 
-    logging.info('Reading config file: ' + filename)
+    logging.info('Reading config file: %s', FILENAME)
     try:
-        with open(filename, 'r') as file:
-            if filename.endswith('.json'):
+        with open(FILENAME, 'r') as file:
+            if FILENAME.endswith('.json'):
                 config = json.load(file)
-            elif filename.endswith('.yml'):
-                config = yaml.load(file)
+            elif FILENAME.endswith('.yml'):
+                config = yaml.load(file, Loader=yaml.FullLoader)
             else:
                 logging.info(
-                    'Unsupported file extension for configuration ' +
-                    'file: ' + filename
+                    'Unsupported file extension for configuration file: %s'
+                    , FILENAME
                     )
 
-    except IOError as eError:
-        sys.exit(eError)
+    except IOError as io_error:
+        sys.exit(io_error)
 
     mo_module = import_module(config['connection']['module'])
     obj_class = config['connection']['class']
     mo_class = getattr(mo_module, obj_class)
 
-    handle = mo_class(**config['connection']['properties'])
-    handle.login()
+    HANDLE = mo_class(**config['connection']['properties'])
+    HANDLE.login()
 
     for managed_object in config['objects']:
         traverse(managed_object)
         if config['connection']['commit-buffer']:
-            handle.commit()
+            HANDLE.commit()
 
-    handle.logout()
+    HANDLE.logout()

@@ -1,0 +1,70 @@
+---
+
+connection:
+    module: ucsmsdk.ucshandle
+    class: UcsHandle
+    commit-buffer: true
+    properties:
+        ip: 10.10.20.42
+        username: admin
+        password: C1sco12345
+        secure: true
+objects:
+    - 
+        module: ucsmsdk.mometa.org.OrgOrg
+        class: OrgOrg
+        properties:
+            parent_mo_or_dn: org-root
+            name: prod-east
+        message: create organization prod-east
+        children:
+            - 
+                module: ucsmsdk.mometa.org.OrgOrg
+                class: OrgOrg
+                properties:
+                    name: DC01
+                message: created organization prod-east/DC01
+            - 
+                module: ucsmsdk.mometa.org.OrgOrg
+                class: OrgOrg
+                properties:
+                    name: DC02
+                message: created organization prod-east/DC02
+    - 
+        module: ucsmsdk.mometa.lsboot.LsbootPolicy
+        class: LsbootPolicy
+        properties:
+            parent_mo_or_dn: org-root/org-prod-east
+            name: Python_SDS
+            enforce_vnic_name: 'yes'
+            boot_mode: legacy
+            reboot_on_update: 'no'
+        message: Created boot policy
+        children:
+            - 
+                module: ucsmsdk.mometa.lsboot.LsbootVirtualMedia
+                class: LsbootVirtualMedia
+                properties:
+                    access: read-only-local
+                    lun_id: '0'
+                    order: '2'
+                message: added virtual media
+            - 
+                module: ucsmsdk.mometa.lsboot.LsbootStorage
+                class: LsbootStorage
+                properties:
+                    order: '1'
+                message: set local storage boot order
+                children:
+                    - 
+                        module: ucsmsdk.mometa.lsboot.LsbootLocalStorage
+                        class: LsbootLocalStorage
+                        properties: {}
+                        message: added local storage boot
+                        children:
+                            - 
+                                module: ucsmsdk.mometa.lsboot.LsbootDefaultLocalImage
+                                class: LsbootDefaultLocalImage
+                                properties:
+                                    order: '1'
+                                message: added local storage boot image

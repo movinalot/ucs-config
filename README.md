@@ -140,7 +140,7 @@ The `objects` section specifies each object to create and the object's children 
   ## Depth-First Search is the Key
 The configuration file is loaded into a Python dictionary and is traversed using a depth-first search. The image depicts a depth-first search.
 
-![](python/ucsm/images/dfs.jpg)
+![](images/dfs.jpg)
 
 With respect to the configuration file, in this image node 1 is the "objects" list. The second level nodes are parent level objects; node 2 is the Lan Cloud and node 5 is the root Organization. Under the Lan Cloud nodes 3 and 4 are VLANs "700" and "701". Nodes 6 and 8 are sub-organizations of the root organization; "prod-west" and "prod-east". Finally, nodes 7 and 9 are sub-organizations of the prod-east organization; "DC01" and "DC02"
 
